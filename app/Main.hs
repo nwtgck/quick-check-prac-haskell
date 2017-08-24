@@ -26,6 +26,15 @@ prop2 x = x < 1
 prop_negative2 x = (x <= 0) ==> (x * (-1) >= 0)
   where types = (x :: Int)
 
+prop_RevRevWithClassify xs =
+    (len == 0)  `classify` "empty list"
+  $ (len == 1)  `classify` "one-element list"
+  $ (len <= 10) `classify` "short list"
+  $ prop_RevRev xs
+  where
+    len = length xs
+    types = (xs :: [Int])
+
 main :: IO ()
 main = do
   quickCheck (prop_RevRev :: [Int] -> Bool)
@@ -40,6 +49,8 @@ main = do
   quickCheck prop_negative2
 
   quickCheck (forAll (fmap abs arbitrary) prop2)
+
+  quickCheck prop_RevRevWithClassify
 
   when False $
     verboseCheck prop_negative2
