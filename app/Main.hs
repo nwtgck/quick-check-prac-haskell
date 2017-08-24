@@ -59,6 +59,36 @@ instance Arbitrary RGB where
 prop_RGB rgb = True
   where types = rgb :: RGB
 
+
+data Circuit a =
+      Pure a
+    | Not a
+    | And2 (Circuit a) (Circuit a)
+    | Or2  (Circuit a) (Circuit a)
+    | And3 (Circuit a) (Circuit a) (Circuit a)
+    | And4 (Circuit a) (Circuit a) (Circuit a) (Circuit a)
+    | And5 (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a)
+    | And6 (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a)
+    | And7 (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a)
+    | And8 (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a) (Circuit a)
+    deriving Show
+
+instance Arbitrary a => Arbitrary (Circuit a) where
+  arbitrary = oneof [
+      liftM Pure arbitrary
+    , liftM Not arbitrary
+    , liftM2 And2 arbitrary arbitrary
+    , liftM3 And3 arbitrary arbitrary arbitrary
+    , liftM4 And4 arbitrary arbitrary arbitrary arbitrary
+    , liftM5 And5 arbitrary arbitrary arbitrary arbitrary arbitrary
+    , And6 <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary -- liftM6 isn't defined so create by own
+    , And7 <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+    , And8 <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+   ]
+
+prop_Circuit cur = True
+  where types = cur :: Circuit Bool
+
 main :: IO ()
 main = do
   quickCheck (prop_RevRev :: [Int] -> Bool)
@@ -79,6 +109,8 @@ main = do
   quickCheck propMyInt
 
   quickCheck prop_RGB
+
+  quickCheck prop_Circuit
 
   when False $
     quickCheck prop_RevRevWithCollect
