@@ -112,6 +112,10 @@ main = do
 
   quickCheck prop_Circuit
 
+  sample (arbitrary :: Gen Int) -- (from: http://yomi322.hateblo.jp/entry/2013/02/09/211928)
+  sample (arbitrary :: Gen (Circuit Bool))
+
+
   when False $
     quickCheck prop_RevRevWithCollect
 
