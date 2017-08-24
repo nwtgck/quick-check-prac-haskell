@@ -40,4 +40,6 @@ main = do
 
   quickCheck (forAll (fmap abs arbitrary) prop2)
 
+  verboseCheck prop_negative2
+
   -- quickCheckWith stdArgs{maxSuccess=100000} prop_not_always_correct
