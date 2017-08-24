@@ -4,12 +4,11 @@
 
 ```sh
 $ cd <this-repo>
-$ ./run.sh
+$ stack build --exec quick-check-prac-haskell-exe
 ```
 
-## Dependencies
-### stack
+### stack command
 
-This repository is a stack project, so you need stack command. If you don't have stack command, you can install it by the following instruction.
+If you don't have stack command, you can install it by the following instruction.
 
 https://docs.haskellstack.org/en/stable/README/#how-to-install
