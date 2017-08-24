@@ -51,6 +51,14 @@ instance Arbitrary MyInt where
 
 propMyInt (MyInt n) = n < 100
 
+data RGB = Red | Blue | Green deriving Show
+
+instance Arbitrary RGB where
+  arbitrary = oneof (fmap return [Red, Blue, Green])
+
+prop_RGB rgb = True
+  where types = rgb :: RGB
+
 main :: IO ()
 main = do
   quickCheck (prop_RevRev :: [Int] -> Bool)
@@ -69,6 +77,8 @@ main = do
   quickCheck prop_RevRevWithClassify
 
   quickCheck propMyInt
+
+  quickCheck prop_RGB
 
   when False $
     quickCheck prop_RevRevWithCollect
