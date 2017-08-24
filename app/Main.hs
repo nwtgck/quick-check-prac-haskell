@@ -45,7 +45,9 @@ prop_RevRevWithCollect xs = collect (length xs) (prop_RevRev xs)
 newtype MyInt = MyInt Int deriving (Eq, Ord, Show, Num)
 
 instance Arbitrary MyInt where
-  arbitrary = fmap MyInt (choose (minBound, maxBound))
+  arbitrary = sized $ \n -> do
+   v <- choose (-n, n)
+   return (MyInt v)
 
 propMyInt (MyInt n) = n < 100
 
