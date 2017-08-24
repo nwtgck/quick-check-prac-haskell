@@ -19,6 +19,9 @@ prop_1 x y = x+y < x
 prop_negative x = x * (-1) < 0
   where types = (x :: Int)
 
+prop2 x = x < 1
+  where types = x :: Int
+
 prop_negative2 x = (x <= 0) ==> (x * (-1) >= 0)
   where types = (x :: Int)
 
@@ -34,5 +37,7 @@ main = do
 
   quickCheck prop_negative
   quickCheck prop_negative2
+
+  quickCheck (forAll (fmap abs arbitrary) prop2)
 
   -- quickCheckWith stdArgs{maxSuccess=100000} prop_not_always_correct
