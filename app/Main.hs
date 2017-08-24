@@ -35,6 +35,9 @@ prop_RevRevWithClassify xs =
     len = length xs
     types = (xs :: [Int])
 
+prop_RevRevWithCollect xs = collect (length xs) (prop_RevRev xs)
+  where types = xs :: [Int]
+
 main :: IO ()
 main = do
   quickCheck (prop_RevRev :: [Int] -> Bool)
@@ -51,6 +54,8 @@ main = do
   quickCheck (forAll (fmap abs arbitrary) prop2)
 
   quickCheck prop_RevRevWithClassify
+
+  quickCheck prop_RevRevWithCollect
 
   when False $
     verboseCheck prop_negative2
