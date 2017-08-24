@@ -1,3 +1,7 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
+--(from: http://itpro.nikkeibp.co.jp/article/COLUMN/20080304/295346/?rt=nocnt)
+
 module Main where
 
 import           Control.Monad
@@ -38,6 +42,13 @@ prop_RevRevWithClassify xs =
 prop_RevRevWithCollect xs = collect (length xs) (prop_RevRev xs)
   where types = xs :: [Int]
 
+newtype MyInt = MyInt Int deriving (Eq, Ord, Show, Num)
+
+instance Arbitrary MyInt where
+  arbitrary = fmap MyInt (choose (minBound, maxBound))
+
+propMyInt (MyInt n) = n < 100
+
 main :: IO ()
 main = do
   quickCheck (prop_RevRev :: [Int] -> Bool)
@@ -55,7 +66,10 @@ main = do
 
   quickCheck prop_RevRevWithClassify
 
-  quickCheck prop_RevRevWithCollect
+  quickCheck propMyInt
+
+  when False $
+    quickCheck prop_RevRevWithCollect
 
   when False $
     verboseCheck prop_negative2
